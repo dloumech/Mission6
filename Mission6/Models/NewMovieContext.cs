@@ -15,5 +15,45 @@ namespace Mission6AssignmentDarbyMecham.Models
         }
 
         public DbSet<NewMovie> newMovies { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder mb)
+        {
+            mb.Entity<NewMovie>().HasData(
+
+                new NewMovie
+                {
+                    MovieCategory="Romantic Comedy",
+                    MovieTitle="Crazy Rich Asians",
+                    MovieYear="2018",
+                    MovieDirector="Jon M. Chu",
+                    MovieRating="PG-13",
+                    Edited=false,
+                    LentTo="Mom",
+                    Notes="None"
+                },
+                new NewMovie
+                {
+                    MovieCategory = "Comedy",
+                    MovieTitle = "Baby Mama",
+                    MovieYear = "2008",
+                    MovieDirector = "Michael McCullers",
+                    MovieRating = "PG-13",
+                    Edited = false,
+                    LentTo = "Chloe",
+                    Notes = "Funiest movie"
+                },
+                new NewMovie
+                {
+                    MovieCategory = "Childrens",
+                    MovieTitle = "Book of Life",
+                    MovieYear = "2014",
+                    MovieDirector = "Jorge R. Gutierrez",
+                    MovieRating = "PG",
+                    Edited = false,
+                    LentTo = "Adaly",
+                    Notes = "None"
+                }
+                );
+        }
     }
 }

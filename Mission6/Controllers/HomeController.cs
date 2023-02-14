@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Mission6.Models;
+using Mission6AssignmentDarbyMecham.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,10 +13,13 @@ namespace Mission6.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private NewMovieContext _movieContext { get; set; }
 
-        public HomeController(ILogger<HomeController> logger)
+        //Constructor
+        public HomeController(ILogger<HomeController> logger, NewMovieContext nmc)
         {
             _logger = logger;
+            _movieContext = nmc;
         }
 
         public IActionResult Index()
@@ -36,6 +40,8 @@ namespace Mission6.Controllers
         [HttpPost]
         public IActionResult AddMovie(NewMovie nm)
         {
+            _movieContext.Add(nm);
+            _movieContext.SaveChanges();
             return View("Confirmation", nm);
         }
         public IActionResult Privacy()

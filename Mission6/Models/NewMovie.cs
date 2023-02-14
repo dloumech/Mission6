@@ -13,6 +13,7 @@ namespace Mission6AssignmentDarbyMecham.Models
         [Required]
         public string MovieCategory { get; set; }
 
+        [Key]
         [Required] 
         public string MovieTitle { get; set; }
         [Required]

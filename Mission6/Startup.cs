@@ -29,7 +29,7 @@ namespace Mission6
 
             services.AddDbContext<NewMovieContext>(options =>
            {
-               options.UseSqlite(Configuration["ConnectionStrings: MovieConnection"]);
+               options.UseSqlite(Configuration["ConnectionStrings:MovieConnection"]);
            });
                 
         }
