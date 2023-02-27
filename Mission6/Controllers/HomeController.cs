@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Mission6.Models;
+using Mission6.Controllers;
 using Mission6AssignmentDarbyMecham.Models;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,11 @@ namespace Mission6.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private NewMovieContext _movieContext { get; set; }
 
         //Constructor
-        public HomeController(ILogger<HomeController> logger, NewMovieContext nmc)
+        public HomeController( NewMovieContext nmc)
         {
-            _logger = logger;
             _movieContext = nmc;
         }
 
@@ -34,25 +33,75 @@ namespace Mission6.Controllers
         [HttpGet]
         public IActionResult AddMovie()
         {
+            ViewBag.Categories = _movieContext.Categories.ToList();
+
             return View("AddMovie");
         }
 
         [HttpPost]
         public IActionResult AddMovie(NewMovie nm)
         {
-            _movieContext.Add(nm);
-            _movieContext.SaveChanges();
-            return View("Confirmation", nm);
-        }
-        public IActionResult Privacy()
-        {
-            return View();
+            if(ModelState.IsValid)
+            {
+                _movieContext.Add(nm);
+                _movieContext.SaveChanges();
+                return View("Confirmation", nm);
+            }
+            else //if INvalid
+            {
+                ViewBag.Categories = _movieContext.Categories.ToList();
+
+                return View(nm);
+            }
+
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        //link for list of movies in DB
+        [HttpGet]
+        public IActionResult MovieList ()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            //creating list to store movie data
+            var MovieApplications = _movieContext.newMovies
+                .Include(x => x.Category)
+                .OrderBy(x => x.Category)
+                .ToList();
+
+            return View(MovieApplications);
         }
+
+        [HttpGet]
+        public IActionResult Edit (int movieID)
+        {
+            ViewBag.Categories = _movieContext.Categories.ToList();
+
+            var application = _movieContext.newMovies.Single(x => x.MovieID == movieID);
+            
+            return View("AddMovie", application);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(NewMovie newM)
+        {
+            _movieContext.Update(newM);
+            _movieContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+        [HttpGet]
+        public IActionResult Delete (int movieID)
+        {
+            var application = _movieContext.newMovies.Single(x => x.MovieID == movieID);
+
+            return View(application);
+        }
+        [HttpPost]
+        public IActionResult Delete (NewMovie newM)
+        {
+            _movieContext.newMovies.Remove(newM);
+            _movieContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+
     }
 }

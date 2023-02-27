@@ -8,8 +8,15 @@
 
 <div>
     <form method="post">
-        <label asp-for="MovieCategory">Category:</label>
-        <input asp-for="MovieCategory" />
+        <div asp-validation-summary="All"></div>
+        <label asp-for="CategoryID">Category:</label>
+        <select asp-for="CategoryID">
+            <option value ="">Pick Movie Category</option>
+            @foreach (Category c in ViewBag.Categories)
+            {
+                <option value="@c.CategoryID">@c.CategoryName</option>
+            }
+        </select>
         <br />
         <label asp-for="MovieTitle">Movie Title:</label>
         <input asp-for="MovieTitle" />
@@ -38,7 +45,7 @@
         <input asp-for="LentTo" />
         <br />
         <label asp-for="Notes">Notes:</label>
-        <input asp-for="Notes"/>
+        <input asp-for="Notes" />
         <br />
         <button type="submit">Add Movie</button>
     </form>
