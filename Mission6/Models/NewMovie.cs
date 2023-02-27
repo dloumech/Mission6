@@ -11,10 +11,14 @@ namespace Mission6AssignmentDarbyMecham.Models
     {
         //category, title, year, director, edited, lent to, notes
         [Required]
-        public string MovieCategory { get; set; }
+        //build foreign key relationship
+        public int CategoryID { get; set; }
+        public Category Category { get; set; }
 
         [Key]
         [Required] 
+        public int MovieID { get; set; }
+        [Required]
         public string MovieTitle { get; set; }
         [Required]
         public string MovieYear { get; set; }
